@@ -1,0 +1,23 @@
+#include "Wilk.h"
+#include "Swiat.h"
+
+/*class Wilk :public Zwierze
+{
+public:
+	Wilk(int n_x, int n_y);
+	~Wilk();
+	 void akcja();
+	 void kolizja();
+	 void rysowanie();
+};*/
+
+Wilk::Wilk(int n_x, int n_y, Swiat* n_swiat) : Zwierze(9, 5, n_x, n_y, Gatunek::wilk, n_swiat) {
+}
+
+Wilk::~Wilk()
+{
+	cout << "Wilk umiera\n";
+}
+//void Wilk::akcja(){}
+void Wilk::kolizja() {}
+void Wilk::rysowanie() {}
