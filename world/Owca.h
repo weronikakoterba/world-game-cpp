@@ -7,5 +7,6 @@ public:
 	Owca(int n_x, int n_y, Swiat* n_swiat);
 	~Owca();
 	void rysowanie();
+	void stworzOrganizm(int n_x, int n_y);
 };
 

@@ -3,15 +3,14 @@
 #include "Zwierze.h"
 #include "Wilk.h"
 #include "Owca.h"
+#include "Antylopa.h"
+#include "Zolw.h"
+#include "Lis.h"
 #include <vector>
+#include <algorithm>
 using namespace std;
 
-int Swiat::getSzerokosc() {
-	return szerokosc;
-}
-int Swiat::getWysokosc() {
-	return wysokosc;
-}
+
 Swiat::Swiat(int n_wysokosc, int n_szerokosc) :wysokosc(n_wysokosc),szerokosc(n_szerokosc){
 	tab = new Organizm ** [n_wysokosc];
 	for (int i = 0; i < n_wysokosc; i++) {
@@ -22,12 +21,30 @@ Swiat::Swiat(int n_wysokosc, int n_szerokosc) :wysokosc(n_wysokosc),szerokosc(n_
 	}
 
 	// dodawanie wilków
-	Organizm* nowy = new Wilk(10, 10, this);
-	tab[10][10] = nowy;
+	/*Organizm* nowy = new Wilk(1, 1, this);
+	tab[1][1] = nowy;
+	wektor.push_back(nowy);*/
+	//Organizm* nowy = new Owca(2, 2, this);
+	//tab[2][2] = nowy;
+	//wektor.push_back(nowy);
+	//nowy = new Owca(4, 4, this);
+	//tab[4][4] = nowy;
+	//wektor.push_back(nowy);
+	/*nowy = new Zolw(3, 3, this);
+    tab[3][3] = nowy;
+	wektor.push_back(nowy);*/
+	Organizm* nowy = new Owca(1, 1, this);
+	tab[1][1] = nowy;
 	wektor.push_back(nowy);
-	nowy = new Owca(12, 12, this);
-	tab[12][12] = nowy;
+	nowy = new Lis(2, 2, this);
+	tab[2][2] = nowy;
 	wektor.push_back(nowy);
+	/*Organizm* nowy = new Antylopa(1, 1, this);
+	tab[1][1] = nowy;
+	wektor.push_back(nowy);*/
+
+	//wektor.push_back(nowy);
+
 	/*nowy = new Wilk(5, 5, this);
 	tab[5][5] = nowy;
 	wektor.push_back(nowy);
@@ -35,7 +52,9 @@ Swiat::Swiat(int n_wysokosc, int n_szerokosc) :wysokosc(n_wysokosc),szerokosc(n_
 	tab[10][10] = nowy;
 	wektor.push_back(nowy);*/
 }
-
+Organizm*** Swiat::getTab() {
+	return tab;
+}
 
 void Swiat::rysujSwiat() {
 	for (int i = 0; i < wysokosc; i++) {
@@ -43,16 +62,7 @@ void Swiat::rysujSwiat() {
 			if (tab[i][j] == nullptr) cout << '_';
 			else
 			{
-				switch (tab[i][j]->gatunek) {
-				case wilk:
-					cout << 'W';
-					break;
-				case owca:
-					cout << 'O';
-					break;
-				default:
-					cout << '_';
-				}
+				tab[i][j]->rysowanie();
 			}
 		}
 		cout << endl;
@@ -79,28 +89,81 @@ Swiat::~Swiat() {
 void Swiat::przesun_organizm(int temp_x, int temp_y, int x, int y)
 {
 	Organizm* temp = tab[temp_x][temp_y];
-
-	// czy dochodzi do kolizji?
-	if (tab[x][y] != nullptr)
-	{
-		// mamy kolizjê!
-		temp->kolizja(tab[x][y]);
-	}
-	else
-	{
-		tab[temp_x][temp_y] = nullptr;
-		tab[x][y] = temp;
-	}
+	Organizm* noweMiejsce = tab[x][y];
+		// czy dochodzi do kolizji?
+		if (tab[x][y] != nullptr /*&& temp->czyZaatakuje(noweMiejsce)*/)
+		{
+			temp->kolizja(tab[x][y]);
+		}
+		/*else if (tab[x][y] != nullptr && temp->czyZaatakuje(noweMiejsce)==false) {
+			return;
+		}*/
+		else
+		{
+			tab[temp_x][temp_y] = nullptr;
+			tab[x][y] = temp;
+		}
 
 	//cout << "Wykonano ruch\n";
 }
 
 void Swiat::wykonajTure()
 {
+	usuwanieZabitych();
+	sortowanie();
 	unsigned ile = wektor.size();
-	for (unsigned i = 0; i < ile; ++i)
+	for (unsigned i = 0; i < ile; i++)
 	{
-		cout << "chce wykonac akcje " << i << endl;
-		wektor[i]->akcja();
+		if (wektor[i]->getZyje() == true) {
+			cout << "chce wykonac akcje " << i << endl;
+			wektor[i]->akcja();
+		}
 	}
+	for (int i = 0; i < wektor.size(); i++) {
+		wektor[i]->zwiekszWiek();
+	}
+
+	
+}
+
+bool porownanieOrganizmu(Organizm*& lewy, Organizm*& prawy) {
+	if (lewy->getInicjatywa() > prawy->getInicjatywa()) {
+		return true;
+	}
+	else if (lewy->getInicjatywa() == prawy->getInicjatywa()) {
+		if (lewy->getWiek()>prawy->getWiek()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+}
+
+void Swiat::sortowanie() {
+	sort(wektor.begin(), wektor.end(), porownanieOrganizmu);
+}
+
+bool czyUsunac(Organizm*& organizm) {
+	if (organizm->getZyje() == false) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void Swiat::usuwanieZabitych() {
+	auto zabijanie = remove_if(wektor.begin(), wektor.end(), czyUsunac);
+	for (auto i = zabijanie; i != wektor.end(); i++) {
+		delete *i;
+	}
+	wektor.erase(zabijanie,wektor.end());
+}
+
+void Swiat::dodajOrganizm(Organizm* organizm, int x, int y)
+{
+	tab[x][y] = organizm;
+	wektor.push_back(organizm);
 }

@@ -6,4 +6,11 @@ Owca::~Owca()
 {
 	cout << "Owca umiera\n";
 }
-void Owca::rysowanie() {}
+void Owca::rysowanie() {
+	cout << 'O';
+}
+void Owca::stworzOrganizm(int n_x, int n_y)
+{
+	Organizm* nowyWilk = new Owca(n_x, n_y, swiat);
+	swiat->dodajOrganizm(nowyWilk, n_x, n_y);
+}

@@ -6,8 +6,12 @@ extern int szerokosc;
 
 enum Gatunek {
 	wilk,
-	owca
+	owca,
+	zolw,
+	antylopa,
+	lis,
 };
+
 
 /*ostream& operator<<(ostream& out, const Gatunek& gatunek)
 {

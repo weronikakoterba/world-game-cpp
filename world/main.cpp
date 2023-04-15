@@ -5,11 +5,12 @@
 #include <conio.h>
 
 using namespace std;
+int wysokosc = 5;
+int szerokosc = 5;
 
-int wysokosc = 20;
-int szerokosc = 20;
 
 int main() {
+
 	srand(time(nullptr));
 	Swiat s(wysokosc, szerokosc);
 	s.rysujSwiat();
@@ -17,6 +18,7 @@ int main() {
 
 	while (true)
 	{
+	
 	s.wykonajTure();
 	_getch();
 	system("cls");
