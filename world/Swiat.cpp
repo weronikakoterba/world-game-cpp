@@ -6,6 +6,8 @@
 #include "Antylopa.h"
 #include "Zolw.h"
 #include "Lis.h"
+#include "Trawa.h"
+#include "Mlecz.h"
 #include <vector>
 #include <algorithm>
 using namespace std;
@@ -33,12 +35,21 @@ Swiat::Swiat(int n_wysokosc, int n_szerokosc) :wysokosc(n_wysokosc),szerokosc(n_
 	/*nowy = new Zolw(3, 3, this);
     tab[3][3] = nowy;
 	wektor.push_back(nowy);*/
-	Organizm* nowy = new Owca(1, 1, this);
+	//Organizm* nowy = new Owca(1, 1, this);
+	//tab[1][1] = nowy;
+	//wektor.push_back(nowy);
+	//nowy = new Lis(2, 2, this);
+	//tab[2][2] = nowy;
+	//wektor.push_back(nowy);
+	Organizm* nowy = new Mlecz(1, 1, this);
 	tab[1][1] = nowy;
 	wektor.push_back(nowy);
-	nowy = new Lis(2, 2, this);
-	tab[2][2] = nowy;
-	wektor.push_back(nowy);
+	/*nowy = new Zolw(2, 2, this);
+	tab[2][2] = nowy;*/
+	//wektor.push_back(nowy);
+	/*nowy = new Mlecz(3, 3, this);
+	tab[3][3] = nowy;
+	wektor.push_back(nowy);*/
 	/*Organizm* nowy = new Antylopa(1, 1, this);
 	tab[1][1] = nowy;
 	wektor.push_back(nowy);*/
@@ -62,7 +73,7 @@ void Swiat::rysujSwiat() {
 			if (tab[i][j] == nullptr) cout << '_';
 			else
 			{
-				tab[i][j]->rysowanie();
+				tab[i][j]->rysowanie();//???
 			}
 		}
 		cout << endl;
@@ -89,19 +100,20 @@ Swiat::~Swiat() {
 void Swiat::przesun_organizm(int temp_x, int temp_y, int x, int y)
 {
 	Organizm* temp = tab[temp_x][temp_y];
-	Organizm* noweMiejsce = tab[x][y];
 		// czy dochodzi do kolizji?
-		if (tab[x][y] != nullptr /*&& temp->czyZaatakuje(noweMiejsce)*/)
+		if (tab[x][y] != nullptr && tab[x][y] != temp)
 		{
-			temp->kolizja(tab[x][y]);
+				cout << "Dochodzi do kolizji!\n";
+				temp->kolizja(tab[x][y]);
 		}
-		/*else if (tab[x][y] != nullptr && temp->czyZaatakuje(noweMiejsce)==false) {
-			return;
-		}*/
-		else
+		if(tab[x][y] == nullptr)
 		{
-			tab[temp_x][temp_y] = nullptr;
-			tab[x][y] = temp;
+				tab[temp_x][temp_y] = nullptr;
+				tab[x][y] = temp;
+				temp->x = x;
+				temp->y = y;
+
+			
 		}
 
 	//cout << "Wykonano ruch\n";
@@ -109,10 +121,10 @@ void Swiat::przesun_organizm(int temp_x, int temp_y, int x, int y)
 
 void Swiat::wykonajTure()
 {
-	usuwanieZabitych();
+	//usuwanieZabitych();
 	sortowanie();
 	unsigned ile = wektor.size();
-	for (unsigned i = 0; i < ile; i++)
+	for (unsigned i = 0; i < wektor.size(); i++)// usuwanie w tej samej turze;
 	{
 		if (wektor[i]->getZyje() == true) {
 			cout << "chce wykonac akcje " << i << endl;
@@ -121,9 +133,7 @@ void Swiat::wykonajTure()
 	}
 	for (int i = 0; i < wektor.size(); i++) {
 		wektor[i]->zwiekszWiek();
-	}
-
-	
+	}	
 }
 
 bool porownanieOrganizmu(Organizm*& lewy, Organizm*& prawy) {
@@ -152,6 +162,32 @@ bool czyUsunac(Organizm*& organizm) {
 	else {
 		return false;
 	}
+}
+
+
+void Swiat::usun_organizm(Organizm* organizm)
+{
+	cout << "AAA\n";
+	// usuniêcie z wektora
+	unsigned size = wektor.size();
+	for (unsigned i = 0; i < size; i++) {
+		if (wektor[i] == organizm) {
+			wektor.erase(wektor.begin() + i);
+			break;
+		}
+	}
+	cout << "AAA\n";
+	// usuniêcie z planszy
+	for (int i = 0; i < szerokosc; i++) {
+		for (int j = 0; j < wysokosc; j++) {
+			if (tab[i][j] == organizm)
+			{
+				delete tab[i][j];
+				tab[i][j] = nullptr;
+			}
+		}
+	}
+	cout << "Organizm zostal usuniety.\n";
 }
 
 void Swiat::usuwanieZabitych() {

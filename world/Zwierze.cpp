@@ -19,7 +19,7 @@ Zwierze::Zwierze(int n_sila, int n_inicjatywa, int n_x, int n_y, Gatunek n_gatun
 Zwierze::~Zwierze(){}
 
 void Zwierze::akcja() {
-	//cout << "Wchodze do akcji\n";
+	/*//cout << "Wchodze do akcji\n";
 
 	temp_x = x;
 	temp_y = y;
@@ -33,6 +33,7 @@ void Zwierze::akcja() {
 				break;
 			y--;
 			swiat->przesun_organizm(temp_x, temp_y, x, y);
+			cout << "przesuwa sie na pole " << x << y<<endl;
 			return;
 		case 1: // pojsce w dol
 			if (y == wysokosc - 1)
@@ -40,6 +41,7 @@ void Zwierze::akcja() {
 			y++;
 
 			swiat->przesun_organizm(temp_x, temp_y, x, y);
+			cout << "przesuwa sie na pole " << x << y<<endl;
 			return;
 		case 2:// pojscie w prawo
 			if (x==szerokosc - 1)
@@ -47,6 +49,7 @@ void Zwierze::akcja() {
 			x++;
 
 			swiat->przesun_organizm(temp_x, temp_y, x, y);
+			cout << "przesuwa sie na pole " << x << y << endl;
 			return;
 		case 3:// pojscie w lewo
 			if (x == 0)
@@ -54,6 +57,7 @@ void Zwierze::akcja() {
 			x--;
 
 			swiat->przesun_organizm(temp_x, temp_y, x, y);
+			cout << "przesuwa sie na pole " << x << y << endl;
 			return;
 		//case 4: // gorny lewy rog
 		//	if (x == 0 || y == 0)
@@ -90,8 +94,47 @@ void Zwierze::akcja() {
 
 		}
 	
-	} while (true);	
+	} while (true);	*/
+
+	temp_x = x;
+	temp_y = y;
+	//Organizm* temp = swiat->getTab();
+
+	vector<Wspolrzedne> dostepne;
+	dostepne.clear();
+	Wspolrzedne kierunek;
+	// lewo:
+	if (x > 0)
+	{
+		kierunek.x = x - 1;
+		kierunek.y = y;
+		dostepne.push_back(kierunek);
+	}
+	if (x < szerokosc - 1)
+	{
+		kierunek.x = x + 1;
+		kierunek.y = y;
+		dostepne.push_back(kierunek);
+	}
+	if (y < wysokosc - 1)
+	{
+		kierunek.x = x;
+		kierunek.y = y + 1;
+		dostepne.push_back(kierunek);
+	}
+	if (y > 0)
+	{
+		kierunek.x = x;
+		kierunek.y = y - 1;
+		dostepne.push_back(kierunek);
+	}
+
+	kierunek = dostepne[rand() % dostepne.size()];
+	// przejœcie na podany kierunek
+	cout << "Przesuwam zwierze na pole " << kierunek.x << ' ' << kierunek.y << endl;
+	swiat->przesun_organizm(temp_x, temp_y, kierunek.x, kierunek.y);
 }
+
 void Zwierze::rozmnazanie(Organizm* organizm) {
 	x = temp_x;
 	y = temp_y;
@@ -110,6 +153,10 @@ void Zwierze::rozmnazanie(Organizm* organizm) {
 	}
 }
 
+
+
+
+
 void Zwierze::kolizja(Organizm* organizm) {
 	if (organizm->gatunek == this->gatunek)
 	{
@@ -122,29 +169,29 @@ void Zwierze::kolizja(Organizm* organizm) {
 	else
 	{
 		// walka
-		if (this->sila > organizm->sila)
+		if (this->sila >= organizm->sila)
 		{
 			if (organizm->czyOdbijeAtak(this) == false) {
-				organizm->zyje = false;
+				/*organizm->zyje = false;
 				this->swiat->tab[x][y] = this;
-				this->swiat->tab[temp_x][temp_y] = nullptr;
-			}
-			else {
-				x = temp_x;
-				y = temp_y;
+				this->swiat->tab[temp_x][temp_y] = nullptr;*/
+				// usuwamy organizm:
+				cout << "Usuwam organizm\n";
+				//this->swiat->tab[x][y] = this;
+				organizm->swiat->usun_organizm(organizm);// funkcja usuwaj¹ca organizm z planszy i z wektora
+
+				swiat->przesun_organizm(temp_x, temp_y, x, y);	// agresor zajmuje nowe pole
+				//return;
 			}
 			// walka wygrana
 			// zmiana na planszy
 			// œmieræ organizmu, któy dotychczas zajmowa³ to pole (usuniêcie go z planszy i z wektora)
 			// utworzyæ metodê, która usuwa z wektora element o danym adresie komórki
 		}
-		else if (this->sila < organizm->sila) {
-			this->zyje = false;
-			this->swiat->tab[temp_x][temp_y] = nullptr;
-		}
-		else {
-			x = temp_x;
-			y = temp_y;
+		else{
+			/*this->zyje = false;
+			this->swiat->tab[temp_x][temp_y] = nullptr;*/
+			swiat->usun_organizm(this);
 		}
 	}
 }
@@ -157,5 +204,8 @@ bool Zwierze::czyOdbijeAtak(Organizm* organizm)
 bool Zwierze::czyZaatakuje(Organizm* organizm)
 {
 	return true;
+}
+bool Zwierze::czyUcieka() {
+	return false;
 }
 

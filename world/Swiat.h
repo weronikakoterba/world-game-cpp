@@ -7,6 +7,10 @@
 using namespace std;
 class Swiat {
 	friend class Zwierze;
+	friend class Lis;
+	friend class Roslina;
+	friend class Antylopa;
+	friend class Guarana;
 	Organizm*** tab;
 protected:
 	int szerokosc;
@@ -20,6 +24,7 @@ public:
 	 void rysujStanGry();
 	 void sortowanie();
 	 void usuwanieZabitych();
+	 void usun_organizm(Organizm* organizm);
 	 void dodajOrganizm(Organizm* organizm, int x, int y);
 	 //void zabijOrganizm(Organizm* organizm);
 	 ~Swiat();

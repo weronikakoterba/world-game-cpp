@@ -7,8 +7,9 @@ class Organizm {
 	//friend ostream& operator<<(ostream& out, const Organizm& obiekt);
 	friend class Swiat;
 	friend class Zwierze;
+	friend class Roslina;
+	friend class Antylopa;
 protected:
-	
 	Swiat* swiat;
 	Gatunek gatunek;
 	bool zyje = true;
@@ -29,6 +30,7 @@ public:
 	virtual void rysowanie() = 0;
 	virtual bool czyOdbijeAtak(Organizm* organizm) = 0;
 	virtual bool czyZaatakuje(Organizm* organizm) = 0;
+	virtual bool czyUcieka() = 0;
 	virtual void stworzOrganizm(int n_x, int n_y) = 0;
 	void zwiekszWiek();
 };

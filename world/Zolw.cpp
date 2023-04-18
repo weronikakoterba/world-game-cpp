@@ -25,6 +25,7 @@ void Zolw::akcja() {//todo funckja dla zolwia
 				y--;
 
 				swiat->przesun_organizm(temp_x, temp_y, x, y);
+				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
 				return;
 			case 1: // pojsce w dol
 				if (y == wysokosc - 1)
@@ -32,6 +33,7 @@ void Zolw::akcja() {//todo funckja dla zolwia
 				y++;
 
 				swiat->przesun_organizm(temp_x, temp_y, x, y);
+				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
 				return;
 			case 2:// pojscie w prawo
 				if (x == szerokosc - 1)
@@ -39,6 +41,7 @@ void Zolw::akcja() {//todo funckja dla zolwia
 				x++;
 
 				swiat->przesun_organizm(temp_x, temp_y, x, y);
+				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
 				return;
 			case 3:// pojscie w lewo
 				if (x == 0)
@@ -46,6 +49,7 @@ void Zolw::akcja() {//todo funckja dla zolwia
 				x--;
 
 				swiat->przesun_organizm(temp_x, temp_y, x, y);
+				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
 				return;
 			//case 4: // gorny lewy rog
 			//	if (x == 0 || y == 0)
@@ -88,11 +92,17 @@ void Zolw::akcja() {//todo funckja dla zolwia
 void Zolw::rysowanie() {
 	cout << 'Z';
 }
+
+
 bool Zolw::czyOdbijeAtak(Organizm* organizm) {
-	if (organizm->getInicjatywa() < 5)
+	if (organizm->getSila() < 5) {
+		cout << "odbija atak" << endl;
 		return true;
-	else
+	}
+	else {
+		cout << "nie odbija ataku\n";
 		return false;
+	}
 }
 void Zolw::stworzOrganizm(int n_x, int n_y)
 {

@@ -15,5 +15,6 @@ public:
 	virtual void kolizja(Organizm*organizm);
 	virtual bool czyOdbijeAtak(Organizm* organizm);
 	virtual bool czyZaatakuje(Organizm* organizm);
+	virtual bool czyUcieka();
 	virtual void stworzOrganizm(int n_x, int n_y) = 0;
 };
