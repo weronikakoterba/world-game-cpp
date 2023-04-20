@@ -6,7 +6,6 @@ public:
 	Antylopa(int n_x, int n_y, Swiat* n_swiat);
 	~Antylopa();
 	void akcja();
-	//bool czyUcieka();
 	void stworzOrganizm(int n_x, int n_y);
 	void wybieraniePolaObok(int n_x,int n_y);
 	void rysowanie();

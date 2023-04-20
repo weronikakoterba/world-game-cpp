@@ -10,8 +10,9 @@ Guarana::~Guarana()
 void Guarana::rysowanie() {
 	cout << "G";
 }
-//void Guarana::zwiêkszSile(Organizm* organizm) {
-//}
+bool Guarana::czyZwiekszaSile(Organizm* organizm) {
+	return true;
+}
 
 void Guarana::stworzOrganizm(int n_x, int n_y) {
 	Organizm* nowaGuarana = new Guarana(n_x, n_y, swiat);

@@ -12,7 +12,8 @@ public:
 	virtual void rozsiewanie(int n_x,int n_y);
 	virtual bool czyOdbijeAtak(Organizm* organizm);
 	virtual bool czyZaatakuje(Organizm* organizm);
-	virtual bool czyUcieka();
+	virtual bool czyZwiekszaSile(Organizm* organizm);
 	virtual int iloscRozsian();
 	virtual void stworzOrganizm(int n_x, int n_y) = 0;
+	virtual bool smierc(Organizm* organizm);
 };

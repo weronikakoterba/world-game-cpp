@@ -17,4 +17,6 @@ public:
 	virtual bool czyZaatakuje(Organizm* organizm);
 	virtual bool czyUcieka();
 	virtual void stworzOrganizm(int n_x, int n_y) = 0;
+	virtual bool czyZwiekszaSile(Organizm* organizm);
+	virtual bool smierc(Organizm* organizm);
 };

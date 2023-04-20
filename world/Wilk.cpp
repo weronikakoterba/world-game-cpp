@@ -18,8 +18,7 @@ Wilk::~Wilk()
 {
 	cout << "Wilk umiera\n";
 }
-//void Wilk::akcja(){}
-//void Wilk::kolizja() {}
+
 void Wilk::rysowanie() {
 	cout << "W";
 }

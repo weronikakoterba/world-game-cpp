@@ -6,7 +6,6 @@ public:
 	Lis(int n_x, int n_y, Swiat* n_swiat);
 	~Lis();
 	void akcja();
-	//void kolizja();
 	void rysowanie();
 	void stworzOrganizm(int n_x, int n_y);
 	bool czyZaatakuje(Organizm* organizm);

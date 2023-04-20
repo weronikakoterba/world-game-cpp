@@ -33,6 +33,7 @@ void Roslina::akcja() {
 					if (y == 0)
 						break;
 					y--;
+					//usuwanie tych obok oprcz siebie samego
 					rozsiewanie(x, y);
 					return;
 				case 1: // pojsce w dol
@@ -58,8 +59,7 @@ void Roslina::akcja() {
 		}
 	}
 }
-
-
+void Roslina::kolizja(Organizm* organizm){}
 bool Roslina::czyOdbijeAtak(Organizm* organizm)
 {
 	return false;
@@ -69,9 +69,12 @@ bool Roslina::czyZaatakuje(Organizm* organizm)
 {
 	return true;
 }
-bool Roslina::czyUcieka() {
-	return false;
-}
 int Roslina::iloscRozsian() {
 	return 1;
+}
+bool Roslina::czyZwiekszaSile(Organizm* organizm) {
+	return false;
+}
+bool Roslina::smierc(Organizm* organizm) {
+	return false;
 }

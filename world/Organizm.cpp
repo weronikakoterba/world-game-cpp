@@ -42,15 +42,3 @@ void Organizm::zwiekszWiek()
 {
 	wiek++;
 }
-/*ostream& operator<<(ostream& out, const Organizm& obiekt) {
-	switch (obiekt.gatunek) {
-	case kot:
-		out << "K";
-		return out;
-	case pies:
-		out << "p";
-		return out;
-	default:
-		return out;
-	}
-}*/

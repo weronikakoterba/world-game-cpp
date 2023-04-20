@@ -8,16 +8,18 @@
 #include "Lis.h"
 #include "Trawa.h"
 #include "Mlecz.h"
+#include "Guarana.h"
+#include "WilczeJagody.h"
 #include <vector>
 #include <algorithm>
 using namespace std;
 
 
-Swiat::Swiat(int n_wysokosc, int n_szerokosc) :wysokosc(n_wysokosc),szerokosc(n_szerokosc){
-	tab = new Organizm ** [n_wysokosc];
-	for (int i = 0; i < n_wysokosc; i++) {
-		tab[i] = new Organizm* [n_szerokosc];
-		for (int j = 0; j < n_szerokosc; j++) {
+Swiat::Swiat(int wysokosc, int szerokosc){
+	tab = new Organizm ** [wysokosc];
+	for (int i = 0; i < wysokosc; i++) {
+		tab[i] = new Organizm* [szerokosc];
+		for (int j = 0; j < szerokosc; j++) {
 			tab[i][j] = nullptr;
 		}
 	}
@@ -35,18 +37,24 @@ Swiat::Swiat(int n_wysokosc, int n_szerokosc) :wysokosc(n_wysokosc),szerokosc(n_
 	/*nowy = new Zolw(3, 3, this);
     tab[3][3] = nowy;
 	wektor.push_back(nowy);*/
-	//Organizm* nowy = new Owca(1, 1, this);
-	//tab[1][1] = nowy;
-	//wektor.push_back(nowy);
-	//nowy = new Lis(2, 2, this);
-	//tab[2][2] = nowy;
-	//wektor.push_back(nowy);
-	Organizm* nowy = new Mlecz(1, 1, this);
+	/*Organizm* nowy = new Owca(1, 1, this);
 	tab[1][1] = nowy;
 	wektor.push_back(nowy);
-	/*nowy = new Zolw(2, 2, this);
+	nowy = new Lis(2, 2, this);
+	tab[2][2] = nowy;
+	wektor.push_back(nowy);*/
+	/*Organizm* nowy = new Guarana(1, 1, this);
+	tab[1][1] = nowy;
+	wektor.push_back(nowy);*/
+	/*nowy = new Guarana(2, 2, this);
 	tab[2][2] = nowy;*/
 	//wektor.push_back(nowy);
+	Organizm* nowy = new Owca(3, 3, this);
+	tab[3][3] = nowy;
+	wektor.push_back(nowy);
+	nowy = new Zolw(4, 4, this);
+	tab[4][4] = nowy;
+	wektor.push_back(nowy);
 	/*nowy = new Mlecz(3, 3, this);
 	tab[3][3] = nowy;
 	wektor.push_back(nowy);*/
@@ -62,9 +70,6 @@ Swiat::Swiat(int n_wysokosc, int n_szerokosc) :wysokosc(n_wysokosc),szerokosc(n_
 	nowy = new Wilk(10, 10, this);
 	tab[10][10] = nowy;
 	wektor.push_back(nowy);*/
-}
-Organizm*** Swiat::getTab() {
-	return tab;
 }
 
 void Swiat::rysujSwiat() {
@@ -97,16 +102,16 @@ Swiat::~Swiat() {
 	cout << "Zniszczono swiat\n";
 }
 
-void Swiat::przesun_organizm(int temp_x, int temp_y, int x, int y)
+void Swiat::przesunOrganizm(int temp_x, int temp_y, int x, int y, bool sprawdzaj)
 {
 	Organizm* temp = tab[temp_x][temp_y];
 		// czy dochodzi do kolizji?
-		if (tab[x][y] != nullptr && tab[x][y] != temp)
+	if (sprawdzaj && tab[x][y] != nullptr)
 		{
 				cout << "Dochodzi do kolizji!\n";
 				temp->kolizja(tab[x][y]);
 		}
-		if(tab[x][y] == nullptr)
+		else
 		{
 				tab[temp_x][temp_y] = nullptr;
 				tab[x][y] = temp;
@@ -121,7 +126,6 @@ void Swiat::przesun_organizm(int temp_x, int temp_y, int x, int y)
 
 void Swiat::wykonajTure()
 {
-	//usuwanieZabitych();
 	sortowanie();
 	unsigned ile = wektor.size();
 	for (unsigned i = 0; i < wektor.size(); i++)// usuwanie w tej samej turze;
@@ -155,17 +159,17 @@ void Swiat::sortowanie() {
 	sort(wektor.begin(), wektor.end(), porownanieOrganizmu);
 }
 
-bool czyUsunac(Organizm*& organizm) {
-	if (organizm->getZyje() == false) {
-		return true;
-	}
-	else {
-		return false;
-	}
-}
+//bool czyUsunac(Organizm*& organizm) {
+//	if (organizm->getZyje() == false) {
+//		return true;
+//	}
+//	else {
+//		return false;
+//	}
+//}
 
 
-void Swiat::usun_organizm(Organizm* organizm)
+void Swiat::usunOrganizm(Organizm* organizm)
 {
 	cout << "AAA\n";
 	// usuniêcie z wektora
@@ -190,13 +194,13 @@ void Swiat::usun_organizm(Organizm* organizm)
 	cout << "Organizm zostal usuniety.\n";
 }
 
-void Swiat::usuwanieZabitych() {
-	auto zabijanie = remove_if(wektor.begin(), wektor.end(), czyUsunac);
-	for (auto i = zabijanie; i != wektor.end(); i++) {
-		delete *i;
-	}
-	wektor.erase(zabijanie,wektor.end());
-}
+//void Swiat::usuwanieZabitych() {
+//	auto zabijanie = remove_if(wektor.begin(), wektor.end(), czyUsunac);
+//	for (auto i = zabijanie; i != wektor.end(); i++) {
+//		delete *i;
+//	}
+//	wektor.erase(zabijanie,wektor.end());
+//}
 
 void Swiat::dodajOrganizm(Organizm* organizm, int x, int y)
 {

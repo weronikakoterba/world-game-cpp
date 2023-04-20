@@ -8,83 +8,11 @@ Antylopa::~Antylopa()
 	cout << "Wilk umiera\n";
 }
 void Antylopa::akcja(){
-	//temp_x = x;
-	//temp_y = y;
-
-	//do {
-	//	short kierunek = rand() % 4;		// losujê liczbê z przedzia³u <0, 7>
-	//	cout << kierunek << endl;
-	//	switch (kierunek) {
-	//	case 0:		// pójœcie w górê
-	//		if (y == 0 || y==1)
-	//			break;
-	//		y=y-2;
-
-	//		swiat->przesun_organizm(temp_x, temp_y, x, y);
-	//		return;
-	//	case 1: // pojsce w dol
-	//		if (y == wysokosc - 1 || y==wysokosc-2)
-	//			break;
-	//		y=y+2;
-
-	//		swiat->przesun_organizm(temp_x, temp_y, x, y);
-	//		return;
-	//	case 2:// pojscie w prawo
-	//		if (x == szerokosc - 1 || x==szerokosc-2)
-	//			break;
-	//		x=x+2;
-	//		swiat->przesun_organizm(temp_x, temp_y, x, y);
-	//		return;
-	//	case 3:// pojscie w lewo
-	//		if (x == 0 || x==1)
-	//			break;
-	//		x=x-2;
-
-	//		swiat->przesun_organizm(temp_x, temp_y, x, y);
-	//		return;
-		//case 4: // gorny lewy rog
-		//	if (x == 0 || x==1 || y == 0 || y==1)
-		//		break;
-		//	x=x-2;
-		//	y=y-2;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-		//case 5: // gorny prawy rog
-		//	if (x == szerokosc - 1 || x==szerokosc-2 || y == 0 || y==1)
-		//		break;
-		//	x=x+2;
-		//	y=y-2;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-		//case 6: // dolny prawy rog
-		//	if (x == szerokosc - 1 || x==szerokosc-2 || y == wysokosc - 1 || y==wysokosc-2)
-		//		break;
-		//	x=x+2;
-		//	y=y+2;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-		//case 7: // dolny lewy rog
-		//	if (x == 0 || x==1 || y == wysokosc - 1 || y==wysokosc-2)
-		//		break;
-		//	x=x-2;
-		//	y=y+2;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-
-
-		//}
-
-	//} while (true);
+	
 	temp_x = x;
 	temp_y = y;
-	//Organizm* temp = swiat->getTab();
 
 	vector<Wspolrzedne> dostepne;
-	//dostepne.clear();
 	Wspolrzedne kierunek;
 	// lewo:
 	if (x > 1)
@@ -131,41 +59,33 @@ void Antylopa::akcja(){
 	}
 
 	cout << "Przesuwam antylope na pole " << kierunek.x << ' ' << kierunek.y << endl;
-	swiat->przesun_organizm(temp_x, temp_y, kierunek.x, kierunek.y);
+	swiat->przesunOrganizm(temp_x, temp_y, kierunek.x, kierunek.y,true);
 }
 void Antylopa::rysowanie() {
 	cout << 'A';
 }
 
-//bool Antylopa::czyUcieka() {
-//	short szansa = rand() % 2;
-//	if (szansa == 0) {
-//		return false;
-//	}
-//	else
-//		cout << "rezygnuje z ataku" << endl;
-//		return true;
-//}
 void Antylopa::stworzOrganizm(int n_x, int n_y)
 {
 	Organizm* nowaAntylopa = new Antylopa(n_x, n_y, swiat);
 	swiat->dodajOrganizm(nowaAntylopa, n_x, n_y);
 }
+
 void Antylopa::wybieraniePolaObok(int x,int y) {
 
 	temp_x = x;
 	temp_y = y;
 
 	if (x < szerokosc - 1) {
-		swiat->przesun_organizm(temp_x, temp_y, x+1, y);
+		swiat->przesunOrganizm(temp_x, temp_y, x+1, y,true);
 	}
 	else if (x > 0) {
-		swiat->przesun_organizm(temp_x, temp_y, x-1, y);
+		swiat->przesunOrganizm(temp_x, temp_y, x-1, y, true);
 	}
 	else if (y < wysokosc - 1) {
-		swiat->przesun_organizm(temp_x, temp_y, x, y+1);
+		swiat->przesunOrganizm(temp_x, temp_y, x, y+1, true);
 	}
 	else if (y > 0) {
-		swiat->przesun_organizm(temp_x, temp_y, x, y-1);
+		swiat->przesunOrganizm(temp_x, temp_y, x, y-1, true);
 	}
 }

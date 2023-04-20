@@ -13,95 +13,16 @@ public:
 	virtual void rysowanie() = 0;
 };*/
 
-Zwierze::Zwierze(int n_sila, int n_inicjatywa, int n_x, int n_y, Gatunek n_gatunek, Swiat* n_swiat) :
-	Organizm(n_sila, n_inicjatywa, n_x, n_y, n_gatunek, n_swiat) {}
+Zwierze::Zwierze(int n_sila, int n_inicjatywa, int n_x, int n_y, Gatunek n_gatunek, Swiat* n_swiat) : Organizm(n_sila, n_inicjatywa, n_x, n_y, n_gatunek, n_swiat) {}
 
 Zwierze::~Zwierze(){}
 
 void Zwierze::akcja() {
-	/*//cout << "Wchodze do akcji\n";
 
 	temp_x = x;
 	temp_y = y;
-
-	do{
-		short kierunek = rand() % 4;
-		cout << kierunek << endl;
-		switch (kierunek){
-		case 0:		// pójœcie w górê
-			if (y == 0)
-				break;
-			y--;
-			swiat->przesun_organizm(temp_x, temp_y, x, y);
-			cout << "przesuwa sie na pole " << x << y<<endl;
-			return;
-		case 1: // pojsce w dol
-			if (y == wysokosc - 1)
-				break;
-			y++;
-
-			swiat->przesun_organizm(temp_x, temp_y, x, y);
-			cout << "przesuwa sie na pole " << x << y<<endl;
-			return;
-		case 2:// pojscie w prawo
-			if (x==szerokosc - 1)
-				break;
-			x++;
-
-			swiat->przesun_organizm(temp_x, temp_y, x, y);
-			cout << "przesuwa sie na pole " << x << y << endl;
-			return;
-		case 3:// pojscie w lewo
-			if (x == 0)
-				break;
-			x--;
-
-			swiat->przesun_organizm(temp_x, temp_y, x, y);
-			cout << "przesuwa sie na pole " << x << y << endl;
-			return;
-		//case 4: // gorny lewy rog
-		//	if (x == 0 || y == 0)
-		//		break;
-		//	x--;
-		//	y--;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-		//case 5: // gorny prawy rog
-		//	if (x == szerokosc-1 || y == 0)
-		//		break;
-		//	x++;
-		//	y--;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-		//case 6: // dolny prawy rog
-		//	if (x == szerokosc - 1 || y == wysokosc-1)
-		//		break;
-		//	x++;
-		//	y++;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-		//case 7: // dolny lewy rog
-		//	if (x == 0 || y == wysokosc-1)
-		//		break;
-		//	x--;
-		//	y++;
-
-		//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-		//	return;
-
-		}
-	
-	} while (true);	*/
-
-	temp_x = x;
-	temp_y = y;
-	//Organizm* temp = swiat->getTab();
 
 	vector<Wspolrzedne> dostepne;
-	dostepne.clear();
 	Wspolrzedne kierunek;
 	// lewo:
 	if (x > 0)
@@ -132,7 +53,7 @@ void Zwierze::akcja() {
 	kierunek = dostepne[rand() % dostepne.size()];
 	// przejœcie na podany kierunek
 	cout << "Przesuwam zwierze na pole " << kierunek.x << ' ' << kierunek.y << endl;
-	swiat->przesun_organizm(temp_x, temp_y, kierunek.x, kierunek.y);
+	swiat->przesunOrganizm(temp_x, temp_y, kierunek.x, kierunek.y, true);
 }
 
 void Zwierze::rozmnazanie(Organizm* organizm) {
@@ -153,11 +74,12 @@ void Zwierze::rozmnazanie(Organizm* organizm) {
 	}
 }
 
-
-
-
-
 void Zwierze::kolizja(Organizm* organizm) {
+	if (organizm->smierc(organizm)) {
+		cout << "usuwam przez wilcze jagody";
+		swiat->usunOrganizm(this);
+		return;
+	}
 	if (organizm->gatunek == this->gatunek)
 	{
 		// rozmna¿anie
@@ -176,11 +98,17 @@ void Zwierze::kolizja(Organizm* organizm) {
 				this->swiat->tab[x][y] = this;
 				this->swiat->tab[temp_x][temp_y] = nullptr;*/
 				// usuwamy organizm:
+				if (organizm->czyZwiekszaSile(organizm)) {
+					sila += 3;
+					cout << "sila zwiekszy³a sie o 3";
+				}
 				cout << "Usuwam organizm\n";
 				//this->swiat->tab[x][y] = this;
-				organizm->swiat->usun_organizm(organizm);// funkcja usuwaj¹ca organizm z planszy i z wektora
+				int temp_x = organizm->x, temp_y = organizm->y;		// wspó³rzêdne zwierzêcia zabijanego
+				organizm->swiat->usunOrganizm(organizm);// funkcja usuwaj¹ca organizm z planszy i z wektora
 
-				swiat->przesun_organizm(temp_x, temp_y, x, y);	// agresor zajmuje nowe pole
+				swiat->przesunOrganizm(x, y, temp_x, temp_y, false);
+				// agresor zajmuje nowe pole
 				//return;
 			}
 			// walka wygrana
@@ -191,7 +119,7 @@ void Zwierze::kolizja(Organizm* organizm) {
 		else{
 			/*this->zyje = false;
 			this->swiat->tab[temp_x][temp_y] = nullptr;*/
-			swiat->usun_organizm(this);
+			swiat->usunOrganizm(this);
 		}
 	}
 }
@@ -206,6 +134,12 @@ bool Zwierze::czyZaatakuje(Organizm* organizm)
 	return true;
 }
 bool Zwierze::czyUcieka() {
+	return false;
+}
+bool Zwierze::czyZwiekszaSile(Organizm* organizm) {
+	return false;
+}
+bool Zwierze:: smierc(Organizm* organizm) {
 	return false;
 }
 

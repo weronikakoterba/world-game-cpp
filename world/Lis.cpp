@@ -11,10 +11,8 @@ Lis::~Lis()
 void Lis::akcja() {
 	temp_x = x;
 	temp_y = y;
-	//Organizm* temp = swiat->getTab();
 
 	vector<Wspolrzedne> dostepne;
-	dostepne.clear();
 	Wspolrzedne kierunek;
 	// lewo:
 	if(x > 0)
@@ -55,7 +53,7 @@ void Lis::akcja() {
 		kierunek = dostepne[rand() % size];
 		// przejœcie na podany kierunek
 		cout << "Przesuwam lisa na pole " << kierunek.x << ' ' << kierunek.y << endl;
-		swiat->przesun_organizm(temp_x, temp_y, kierunek.x, kierunek.y);
+		swiat->przesunOrganizm(temp_x, temp_y, kierunek.x, kierunek.y,true);
 	}
 }
 

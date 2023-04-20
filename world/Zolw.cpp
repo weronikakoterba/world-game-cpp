@@ -15,84 +15,44 @@ void Zolw::akcja() {//todo funckja dla zolwia
 	cout << "szansa" << szansa<<endl;
 
 	if (szansa == 0) {
-		do {
-			short kierunek = rand() % 4;		// losujê liczbê z przedzia³u <0, 7>
-			cout << kierunek << endl;
-			switch (kierunek) {
-			case 0:		// pójœcie w górê
-				if (y == 0)
-					break;
-				y--;
 
-				swiat->przesun_organizm(temp_x, temp_y, x, y);
-				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
-				return;
-			case 1: // pojsce w dol
-				if (y == wysokosc - 1)
-					break;
-				y++;
+		vector<Wspolrzedne> dostepne;
+		Wspolrzedne kierunek;
+		// lewo:
+		if (x > 0)
+		{
+			kierunek.x = x - 1;
+			kierunek.y = y;
+			dostepne.push_back(kierunek);
+		}
+		if (x < szerokosc - 1)
+		{
+			kierunek.x = x + 1;
+			kierunek.y = y;
+			dostepne.push_back(kierunek);
+		}
+		if (y < wysokosc - 1)
+		{
+			kierunek.x = x;
+			kierunek.y = y + 1;
+			dostepne.push_back(kierunek);
+		}
+		if (y > 0)
+		{
+			kierunek.x = x;
+			kierunek.y = y - 1;
+			dostepne.push_back(kierunek);
+		}
 
-				swiat->przesun_organizm(temp_x, temp_y, x, y);
-				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
-				return;
-			case 2:// pojscie w prawo
-				if (x == szerokosc - 1)
-					break;
-				x++;
-
-				swiat->przesun_organizm(temp_x, temp_y, x, y);
-				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
-				return;
-			case 3:// pojscie w lewo
-				if (x == 0)
-					break;
-				x--;
-
-				swiat->przesun_organizm(temp_x, temp_y, x, y);
-				cout << "Przesuwam zolwia na pole " << x << ' ' << y << endl;
-				return;
-			//case 4: // gorny lewy rog
-			//	if (x == 0 || y == 0)
-			//		break;
-			//	x--;
-			//	y--;
-
-			//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-			//	return;
-			//case 5: // gorny prawy rog
-			//	if (x == szerokosc - 1 || y == 0)
-			//		break;
-			//	x++;
-			//	y--;
-
-			//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-			//	return;
-			//case 6: // dolny prawy rog
-			//	if (x == szerokosc - 1 || y == wysokosc - 1)
-			//		break;
-			//	x++;
-			//	y++;
-
-			//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-			//	return;
-			//case 7: // dolny lewy rog
-			//	if (x == 0 || y == wysokosc - 1)
-			//		break;
-			//	x--;
-			//	y++;
-
-			//	swiat->przesun_organizm(temp_x, temp_y, x, y);
-			//	return;
-
-			}
-
-		} while (true);
+		kierunek = dostepne[rand() % dostepne.size()];
+		// przejœcie na podany kierunek
+		cout << "Przesuwam zwierze na pole " << kierunek.x << ' ' << kierunek.y << endl;
+		swiat->przesunOrganizm(temp_x, temp_y, kierunek.x, kierunek.y,true);
 	}
 }
 void Zolw::rysowanie() {
 	cout << 'Z';
 }
-
 
 bool Zolw::czyOdbijeAtak(Organizm* organizm) {
 	if (organizm->getSila() < 5) {
