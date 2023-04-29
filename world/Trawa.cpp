@@ -1,14 +1,12 @@
 #include "Trawa.h"
 #include "Swiat.h"
-Trawa::Trawa(int n_x, int n_y, Swiat* n_swiat) : Roslina(0, 0, n_x, n_y, Gatunek::trawa, n_swiat) {
-}
 
-Trawa::~Trawa()
+Trawa::Trawa(int n_x, int n_y, Swiat* n_swiat) : Roslina(0, 0, n_x, n_y, Gatunek::trawa, n_swiat) {}
+
+Trawa::~Trawa() {}
+
+void Trawa::rysowanie()
 {
-	cout << "trawa umiera\n";
-}
-
-void Trawa::rysowanie() {
 	cout << "T";
 }
 

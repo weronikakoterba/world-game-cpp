@@ -10,134 +10,201 @@
 #include "Mlecz.h"
 #include "Guarana.h"
 #include "WilczeJagody.h"
+#include "BarszczSosnowskiego.h"
+#include "Czlowiek.h"
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <string>
 using namespace std;
 
 
-Swiat::Swiat(int wysokosc, int szerokosc){
-	tab = new Organizm ** [wysokosc];
-	for (int i = 0; i < wysokosc; i++) {
-		tab[i] = new Organizm* [szerokosc];
-		for (int j = 0; j < szerokosc; j++) {
-			tab[i][j] = nullptr;
+Swiat::Swiat(int wysokosc, int szerokosc) :wysokosc(wysokosc), szerokosc(szerokosc)
+{
+	tab = new Organizm **[wysokosc];
+	for (int y = 0; y < wysokosc; y++) {
+		tab[y] = new Organizm *[szerokosc];
+		for (int x = 0; x < szerokosc; x++) {
+			tab[y][x] = nullptr;
 		}
 	}
+}
+Swiat::Swiat() {}
 
-	// dodawanie wilków
-	/*Organizm* nowy = new Wilk(1, 1, this);
-	tab[1][1] = nowy;
-	wektor.push_back(nowy);*/
-	//Organizm* nowy = new Owca(2, 2, this);
-	//tab[2][2] = nowy;
-	//wektor.push_back(nowy);
-	//nowy = new Owca(4, 4, this);
-	//tab[4][4] = nowy;
-	//wektor.push_back(nowy);
-	/*nowy = new Zolw(3, 3, this);
-    tab[3][3] = nowy;
-	wektor.push_back(nowy);*/
-	/*Organizm* nowy = new Owca(1, 1, this);
-	tab[1][1] = nowy;
-	wektor.push_back(nowy);
-	nowy = new Lis(2, 2, this);
-	tab[2][2] = nowy;
-	wektor.push_back(nowy);*/
-	/*Organizm* nowy = new Guarana(1, 1, this);
-	tab[1][1] = nowy;
-	wektor.push_back(nowy);*/
-	/*nowy = new Guarana(2, 2, this);
-	tab[2][2] = nowy;*/
-	//wektor.push_back(nowy);
-	Organizm* nowy = new Owca(3, 3, this);
-	tab[3][3] = nowy;
-	wektor.push_back(nowy);
-	nowy = new Zolw(4, 4, this);
-	tab[4][4] = nowy;
-	wektor.push_back(nowy);
-	/*nowy = new Mlecz(3, 3, this);
-	tab[3][3] = nowy;
-	wektor.push_back(nowy);*/
-	/*Organizm* nowy = new Antylopa(1, 1, this);
-	tab[1][1] = nowy;
-	wektor.push_back(nowy);*/
-
-	//wektor.push_back(nowy);
-
-	/*nowy = new Wilk(5, 5, this);
-	tab[5][5] = nowy;
-	wektor.push_back(nowy);
-	nowy = new Wilk(10, 10, this);
-	tab[10][10] = nowy;
-	wektor.push_back(nowy);*/
+Swiat::~Swiat()
+{
+	for (int i = 0; i < wysokosc; ++i) {
+		for (int j = 0; j < szerokosc; ++j) {
+			if (tab[j][i] != nullptr) {
+				delete tab[j][i];
+			}
+		}
+	}
+	for (int i = 0; i < wysokosc; ++i)
+		delete[] tab[i];
+	delete[] tab;
+}
+int Swiat::getSzerokosc()
+{
+	return szerokosc;
 }
 
-void Swiat::rysujSwiat() {
-	for (int i = 0; i < wysokosc; i++) {
-		for (int j = 0; j < szerokosc; j++) {
-			if (tab[i][j] == nullptr) cout << '_';
+int Swiat::getWysokosc()
+{
+	return wysokosc;
+}
+
+Organizm*** Swiat::getTab() 
+{
+	return tab;
+}
+
+void Swiat::losujPola(int& x, int& y)
+{
+	while (true) {
+		x = rand() % (szerokosc - 1);
+		y = rand() % (wysokosc - 1);
+		if (tab[y][x] == nullptr) {
+			return;
+		}
+	}
+}
+
+void Swiat::rysujOrganizmy()
+{
+	Organizm* nowy;
+	int x;
+	int y;
+	losujPola(x, y);
+	nowy = new Czlowiek(x, y, this);
+	tab[y][x] = nowy;
+	wektor.push_back(nowy);
+	for (int i = 0; i < (getSzerokosc() * getWysokosc()) / PROCENT_ZAJMOWAEJ_PLANSZY; i++) {
+		losujPola(x, y);
+		nowy = new Owca(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new Wilk(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new Lis(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new Zolw(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new Antylopa(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new Trawa(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new Mlecz(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new Guarana(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new BarszczSosnowskiego(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+		losujPola(x, y);
+		nowy = new WilczeJagody(x, y, this);
+		tab[y][x] = nowy;
+		wektor.push_back(nowy);
+	}
+}
+
+void Swiat::dodajWyniki(string wynik) 
+{
+	wyniki.push_back(wynik);
+}
+
+void Swiat::rysujWyniki() 
+{
+	int ilosc;
+	if (wyniki.size() < MAX_ILOSC_POWIADOMIEN) 
+	{
+		ilosc = wyniki.size();
+	}
+	else 
+	{
+		ilosc = MAX_ILOSC_POWIADOMIEN;
+	}
+	for (int i = 0; i < ilosc; i++) {
+		cout << wyniki[i] << endl;
+	}
+}
+
+void Swiat::rysujSwiat()
+{
+	for (int y = 0; y < wysokosc; y++) {
+		for (int x = 0; x < szerokosc; x++) {
+			if (tab[y][x] == nullptr) cout << '_';
 			else
 			{
-				tab[i][j]->rysowanie();//???
+				tab[y][x]->rysowanie();
 			}
 		}
 		cout << endl;
 	}
 }
-void Swiat::rysujStanGry() {
-	cout << "wyniki";
-}
-Swiat::~Swiat() {
-	for (int i = 0; i < wysokosc; ++i) {
-		for (int j = 0; j < szerokosc; ++j) {
-			if (tab[i][j] != nullptr) {
-				cout << "Wywoluje destruktor dla pozycji " << i << ',';
-				delete tab[i][j];
-			}
-		}
-	}
-	for (int i = 0; i <wysokosc; ++i)
-		delete[] tab[i];
-	delete[] tab;
-	cout << "Zniszczono swiat\n";
-}
 
 void Swiat::przesunOrganizm(int temp_x, int temp_y, int x, int y, bool sprawdzaj)
 {
-	Organizm* temp = tab[temp_x][temp_y];
-		// czy dochodzi do kolizji?
-	if (sprawdzaj && tab[x][y] != nullptr)
-		{
-				cout << "Dochodzi do kolizji!\n";
-				temp->kolizja(tab[x][y]);
-		}
-		else
-		{
-				tab[temp_x][temp_y] = nullptr;
-				tab[x][y] = temp;
-				temp->x = x;
-				temp->y = y;
-
-			
-		}
-
-	//cout << "Wykonano ruch\n";
+	Organizm* temp = tab[temp_y][temp_x];
+	if (sprawdzaj && tab[y][x] != nullptr)
+	{
+		temp->kolizja(tab[y][x]);
+	}
+	else
+	{
+		tab[temp_y][temp_x] = nullptr;
+		tab[y][x] = temp;
+		temp->setX(x);
+		temp->setY(y);
+	}
 }
 
 void Swiat::wykonajTure()
 {
+	wyniki.clear();
+	cout << "TURA:" << tura << endl;
 	sortowanie();
 	unsigned ile = wektor.size();
-	for (unsigned i = 0; i < wektor.size(); i++)// usuwanie w tej samej turze;
+	for (unsigned i = 0; i < ile; i++)
 	{
-		if (wektor[i]->getZyje() == true) {
-			cout << "chce wykonac akcje " << i << endl;
+		if (wektor[i] != nullptr) {
 			wektor[i]->akcja();
 		}
 	}
+	wektor.erase(remove(wektor.begin(), wektor.end(), nullptr), wektor.end());
 	for (int i = 0; i < wektor.size(); i++) {
-		wektor[i]->zwiekszWiek();
-	}	
+		if (wektor[i] != nullptr) {
+			wektor[i]->zwiekszWiek();
+		}
+	}
+	tura++;
+}
+
+void Swiat::nowaTura() {
+	char znak;
+	while (true)
+	{
+		znak = _getch();
+		if (znak == 't') {
+			break;
+		}
+	}
+	system("cls");
 }
 
 bool porownanieOrganizmu(Organizm*& lewy, Organizm*& prawy) {
@@ -145,7 +212,7 @@ bool porownanieOrganizmu(Organizm*& lewy, Organizm*& prawy) {
 		return true;
 	}
 	else if (lewy->getInicjatywa() == prawy->getInicjatywa()) {
-		if (lewy->getWiek()>prawy->getWiek()) {
+		if (lewy->getWiek() > prawy->getWiek()) {
 			return true;
 		}
 		else {
@@ -155,55 +222,204 @@ bool porownanieOrganizmu(Organizm*& lewy, Organizm*& prawy) {
 	return false;
 }
 
-void Swiat::sortowanie() {
+void Swiat::sortowanie()
+{
 	sort(wektor.begin(), wektor.end(), porownanieOrganizmu);
 }
 
-//bool czyUsunac(Organizm*& organizm) {
-//	if (organizm->getZyje() == false) {
-//		return true;
-//	}
-//	else {
-//		return false;
-//	}
-//}
-
-
 void Swiat::usunOrganizm(Organizm* organizm)
 {
-	cout << "AAA\n";
 	// usuniêcie z wektora
 	unsigned size = wektor.size();
-	for (unsigned i = 0; i < size; i++) {
-		if (wektor[i] == organizm) {
-			wektor.erase(wektor.begin() + i);
+	for (unsigned i = 0; i < size; i++) 
+	{
+		if (wektor[i] == organizm) 
+		{
+			wektor[i] = nullptr;
 			break;
 		}
 	}
-	cout << "AAA\n";
 	// usuniêcie z planszy
-	for (int i = 0; i < szerokosc; i++) {
-		for (int j = 0; j < wysokosc; j++) {
-			if (tab[i][j] == organizm)
+	for (int x = 0; x < szerokosc; x++) 
+	{
+		for (int y = 0; y < wysokosc; y++) 
+		{
+			if (tab[y][x] == organizm)
 			{
-				delete tab[i][j];
-				tab[i][j] = nullptr;
+				delete tab[y][x];
+				tab[y][x] = nullptr;
+				return;
 			}
 		}
 	}
-	cout << "Organizm zostal usuniety.\n";
-}
 
-//void Swiat::usuwanieZabitych() {
-//	auto zabijanie = remove_if(wektor.begin(), wektor.end(), czyUsunac);
-//	for (auto i = zabijanie; i != wektor.end(); i++) {
-//		delete *i;
-//	}
-//	wektor.erase(zabijanie,wektor.end());
-//}
+}
 
 void Swiat::dodajOrganizm(Organizm* organizm, int x, int y)
 {
-	tab[x][y] = organizm;
+	tab[y][x] = organizm;
 	wektor.push_back(organizm);
+}
+
+int Swiat::zapiszDoPliku(bool aktywowanaUmiejetnosc, int ileDoKonca, int ileDoStartu)
+{
+	ofstream plik;
+	string nazwaPliku;
+	cout << "PODAJ NAZWE PLIKU:";
+	cin >> nazwaPliku;
+	plik.open(nazwaPliku);
+	plik << aktywowanaUmiejetnosc << endl;
+	plik << ileDoKonca << endl;
+	plik << ileDoStartu << endl;
+	plik << szerokosc << endl;
+	plik << wysokosc << endl;
+	plik << tura << endl;
+
+	unsigned size = wektor.size();
+
+	for (unsigned i = 0; i < size; ++i)
+	{
+		if (wektor[i] != nullptr) 
+		{
+			DaneOrganizm dane = wektor[i]->pobierz_dane();
+			plik << dane;
+		}
+	}
+
+	plik.close();
+	return 0;
+}
+
+int Swiat::uruchomZPliku()
+{
+	ifstream plik;
+	string nazwaPliku;
+	bool aktywowanaUmiejetnosc;
+	int ileDoKonca;
+	int ileDoStartu;
+	while (true) {
+		cout << "PODAJ NAZWE PLIKU:";
+		cin >> nazwaPliku;
+		plik.open(nazwaPliku);
+		if (plik.is_open()) {
+			break;
+		}
+		cout << "PODANY PLIK NIE ISTNIEJE" << endl;
+	}
+	plik >> aktywowanaUmiejetnosc;
+	plik >> ileDoKonca;
+	plik >> ileDoStartu;
+	plik >> szerokosc;
+	plik >> wysokosc;
+	plik >> tura;
+	Organizm* nowy;
+
+	int gatunek, x, y, sila, wiek;
+	while (plik >> gatunek >> sila >> wiek >> x >> y) 
+	{
+		switch (gatunek)
+		{
+		case Gatunek::wilk:
+			nowy = new Wilk(x, y, this);
+			break;
+		case Gatunek::owca:
+			nowy = new Owca(x, y, this);
+			break;
+		case Gatunek::zolw:
+			nowy = new Zolw(x, y, this);
+			break;
+		case Gatunek::antylopa:
+			nowy = new Antylopa(x, y, this);
+			break;
+		case Gatunek::lis:
+			nowy = new Lis(x, y, this);
+			break;
+		case Gatunek::trawa:
+			nowy = new Trawa(x, y, this);
+			break;
+		case Gatunek::mlecz:
+			nowy = new Mlecz(x, y, this);
+			break;
+		case Gatunek::guarana:
+			nowy = new Guarana(x, y, this);
+			break;
+		case Gatunek::wilczeJagody:
+			nowy = new WilczeJagody(x, y, this);
+			break;
+		case Gatunek::barszczSosnowskiego:
+			nowy = new BarszczSosnowskiego(x, y, this);
+			break;
+		case Gatunek::czlowiek:
+			nowy = new Czlowiek(x, y, this, aktywowanaUmiejetnosc, ileDoKonca, ileDoStartu);
+			break;
+		}
+		wektor.push_back(nowy);
+	}
+	tab = new Organizm * *[wysokosc];
+	for (int y = 0; y < wysokosc; y++) 
+	{
+		tab[y] = new Organizm * [szerokosc];
+		for (int x = 0; x < szerokosc; x++) 
+		{
+			tab[y][x] = nullptr;
+		}
+	}
+	for (int i = 0; i < wektor.size(); i++) 
+	{
+		int x = wektor[i]->getX();
+		int y = wektor[i]->getY();
+		tab[y][x] = wektor[i];
+	}
+	return 0;
+}
+
+void Swiat::wazneInformacje() 
+{
+	cout << "Weronika Koterba, 193127" << endl;
+	cout << "MENU" << endl;
+	cout << "\30 - gora, \31 - dol, \20 - prawo, \21 - lewo " << endl;
+	cout << "t - nowa tura" << endl;
+	cout << "s - zapisz stan gry do pliku" << endl;
+	cout << "enter - szybkosc antylopy" << endl;
+}
+
+string Swiat::wypiszOrganizmy(Organizm* organizm)
+{
+	switch (organizm->getGatunek())
+	{
+	case Gatunek::wilk:
+		return "wilk ";
+	case Gatunek::owca:
+		return "owca ";
+	case Gatunek::zolw:
+		return "zolw ";
+	case Gatunek::antylopa:
+		return "antylopa ";
+	case Gatunek::lis:
+		return "lis ";
+	case Gatunek::trawa:
+		return "trawa ";
+	case Gatunek::mlecz:
+		return "mlecz ";
+	case Gatunek::guarana:
+		return "guarana ";
+	case Gatunek::wilczeJagody:
+		return "wilcze jagody ";
+	case Gatunek::barszczSosnowskiego:
+		return "barszcz sosnowskiego ";
+	case Gatunek::czlowiek:
+		return "czlowiek ";
+	}
+}
+
+ostream& operator<<(ostream& os, const DaneOrganizm& obiekt)
+{
+
+	os << obiekt.gatunek << ' ' << obiekt.sila << ' ' << obiekt.wiek << ' ' << obiekt.x << ' ' << obiekt.y << endl;
+	return os;
+}
+
+DaneOrganizm Swiat::operator[](size_t index)
+{
+	return wektor[index]->pobierz_dane();
 }

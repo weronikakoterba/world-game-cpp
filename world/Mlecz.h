@@ -1,5 +1,6 @@
 #pragma once
 #include "Roslina.h"
+
 class Mlecz :public Roslina
 {
 public:
@@ -7,6 +8,5 @@ public:
 	~Mlecz();
 	void rysowanie();
 	void stworzOrganizm(int n_x, int n_y);
-	int iloscRozsian();
 };
 
